@@ -32,7 +32,6 @@ You will also need to set the environmental variable by
 export LD_LIBRARY_PATH=/gpfs/exfel/sw/software/xfel_anaconda3/karabo-bridge-cpp/lib:$LD_LIBRARY_PATH
 ```
 
-
 #### glimpse
 
 `glimpse` is a command line tool which provides a summary of the data / message structure sent out by the server.
@@ -46,6 +45,14 @@ $ glimpse/glimpse ServerTcpAddress
 # show the message structure
 $ glimpse/glimpse ServerTcpAddress m
 ```
+
+
+#### VFAI
+
+[VFAI](./examples/vfai/) is a concrete example of using `karabo-bridge-cpp` in real-time data visualization 
+and analysis with `Qt` and `OpenCV`.
+
+![](examples/vfai/docs/Screenshot%20from%202019-10-31%2015-14-20.png)
 
 ## Usage
 
