@@ -1,0 +1,15 @@
+cmake_minimum_required(VERSION 3.1)
+
+include(ExternalProject)
+
+ExternalProject_Add(rxcpp
+    GIT_REPOSITORY    https://github.com/ReactiveX/RxCpp.git
+    GIT_TAG           ${rxcpp_REQUIRED_VERSION}
+    SOURCE_DIR        ${thirdparty_BINARY_DIR}/rxcpp-src
+    BINARY_DIR        ${thirdparty_BINARY_DIR}/rxcpp-build
+
+    CONFIGURE_COMMAND ""
+    BUILD_COMMAND     ""
+    INSTALL_COMMAND   ""
+    TEST_COMMAND      ""
+)

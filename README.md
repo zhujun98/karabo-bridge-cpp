@@ -46,14 +46,6 @@ $ glimpse/glimpse ServerTcpAddress
 $ glimpse/glimpse ServerTcpAddress m
 ```
 
-
-#### VFAI
-
-[VFAI](./examples/vfai/) is a concrete example of using `karabo-bridge-cpp` in real-time data visualization 
-and analysis with `Qt` and `OpenCV`.
-
-![](examples/vfai/docs/Screenshot%20from%202019-10-31%2015-14-20.png)
-
 ## Usage
 
 ```c++
@@ -171,6 +163,14 @@ assert(kb_data.array["image.data"].shape()[2] == 512);
 assert(kb_data.array["image.data"].shape()[3] == 64);
 assert(kb_data.array["image.data"].size() == 16*128*512*64);
 ```
+
+## DMI (data management interface)
+
+[DMI](src/dmi) is an application embedded in `karabo-bridge-cpp` which supports real-time data visualization 
+and analysis with [Qt](https://www.qt.io/) and [OpenCV](https://opencv.org/).
+
+![](src/dmi/docs/Screenshot%20from%202019-10-31%2015-14-20.png)
+
 
 ## Deployment
 

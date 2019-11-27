@@ -91,6 +91,10 @@ if (BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif()
 
+if (BUILD_DMI)
+    add_subdirectory(src/dmi)
+endif()
+
 # ============
 # Installation
 # ============

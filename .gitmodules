@@ -1,4 +1,0 @@
-[submodule "examples/vfai/thirdparty/tbb"]
-	path = examples/vfai/thirdparty/tbb
-	url = https://github.com/intel/tbb.git
-    ignore = dirty
