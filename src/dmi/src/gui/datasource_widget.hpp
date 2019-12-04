@@ -62,7 +62,7 @@ private:
   QLineEdit* port_le_;
 
   DSPropertyDelegate* ppt_delegate_;
-//  DSFilterRangeDelegate* fr_delegate_;
+  DSVRangeDelegate* vr_delegate_;
   QTreeView* tree_view_;
   DataSourceTreeModel* tree_model_;
 

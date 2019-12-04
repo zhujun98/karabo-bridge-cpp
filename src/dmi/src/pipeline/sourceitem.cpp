@@ -10,8 +10,12 @@
 #include "sourceitem.hpp"
 
 
-dmi::SourceItem::SourceItem(const QString& category, const QString& src, const QString& ppt)
-  : category_(category), source_(src), property_(ppt)
+dmi::SourceItem::SourceItem(const QString& category,
+                            const QString& src,
+                            const QString& ppt,
+                            const QString& slicer,
+                            const QString& vrange)
+  : category_(category), source_(src), property_(ppt), slicer_(slicer), vrange_(vrange)
 {
   int find = src.indexOf('*');
   if (find != -1)
@@ -33,6 +37,10 @@ QString dmi::SourceItem::getSource() const { return source_; }
 QStringList dmi::SourceItem::getModules() const { return modules_; };
 
 QString dmi::SourceItem::getProperty() const { return property_; }
+
+QString dmi::SourceItem::getSlicer() const { return slicer_; }
+
+QString dmi::SourceItem::getVRange() const { return vrange_; }
 
 dmi::SourceItem::iterator dmi::SourceItem::begin() { return modules_.begin(); }
 dmi::SourceItem::iterator dmi::SourceItem::end() { return modules_.end(); }

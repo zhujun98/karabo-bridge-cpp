@@ -58,6 +58,7 @@ void dmi::MainWindow::initUI()
   c_panel_->setHandleWidth(SPLITTER_HANDLE_WIDTH);
   cw_->addWidget(l_panel_);
   cw_->addWidget(c_panel_);
+  cw_->setSizes({static_cast<int>(width_ * 0.45), static_cast<int>(width_ * 0.55)});
   setCentralWidget(cw_);
 
   initLeftUI();

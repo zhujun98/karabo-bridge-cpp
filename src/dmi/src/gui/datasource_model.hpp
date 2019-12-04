@@ -37,15 +37,15 @@ inline QString getOutputChannel(const QString& src_name)
 }
 
 
-class DSFilterRangeDelegate : public QStyledItemDelegate
+class DSVRangeDelegate : public QStyledItemDelegate
 {
   Q_OBJECT
 
 public:
 
-  explicit DSFilterRangeDelegate(QObject *parent = nullptr);
+  explicit DSVRangeDelegate(QObject *parent = nullptr);
 
-  ~DSFilterRangeDelegate() override = default;
+  ~DSVRangeDelegate() override = default;
 
   QWidget *createEditor(QWidget* parent,
                         const QStyleOptionViewItem& option,
@@ -223,32 +223,6 @@ public:
 private:
 
   QStringList devices_;
-};
-
-
-class CheckBoxDelegate : public QStyledItemDelegate
-{
-  Q_OBJECT
-
-public:
-
-  explicit CheckBoxDelegate(QObject *parent = nullptr);
-
-  ~CheckBoxDelegate() override = default;
-
-  QWidget *createEditor(QWidget *parent,
-                        const QStyleOptionViewItem &option,
-                        const QModelIndex &index) const override;
-
-  void setEditorData(QWidget *editor, const QModelIndex &index) const override;
-
-  void setModelData(QWidget *editor,
-                    QAbstractItemModel *model,
-                    const QModelIndex &index) const override;
-
-  void updateEditorGeometry(QWidget *editor,
-                            const QStyleOptionViewItem &option,
-                            const QModelIndex &index) const override;
 };
 
 } //dmi

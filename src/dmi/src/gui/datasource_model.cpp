@@ -17,51 +17,6 @@
 
 
 /**
- * DSFilterRangeDelegate
- */
-
-dmi::DSFilterRangeDelegate::DSFilterRangeDelegate(QObject* parent)
-  : QStyledItemDelegate(parent)
-{
-}
-
-QWidget* dmi::DSFilterRangeDelegate::createEditor(QWidget* parent,
-                                                  const QStyleOptionViewItem& option,
-                                                  const QModelIndex& index) const
-{
-  Q_UNUSED(option)
-  Q_UNUSED(index)
-
-  auto le = new QLineEdit(parent);
-  return le;
-}
-
-void dmi::DSFilterRangeDelegate::setEditorData(QWidget* editor,
-                                               const QModelIndex& index) const
-{
-    auto le = qobject_cast<QLineEdit*>(editor);
-    const QString value = index.data(Qt::DisplayRole).toString();
-    le->setText(value);
-}
-
-void dmi::DSFilterRangeDelegate::setModelData(QWidget* editor,
-                                              QAbstractItemModel* model,
-                                              const QModelIndex& index) const
-{
-  auto le = qobject_cast<QLineEdit*>(editor);
-  model->setData(index, le->text(), Qt::EditRole);
-}
-
-void dmi::DSFilterRangeDelegate::updateEditorGeometry(QWidget* editor,
-                                                      const QStyleOptionViewItem& option,
-                                                      const QModelIndex& index) const
-{
-  Q_UNUSED(index)
-  editor->setGeometry(option.rect);
-}
-
-
-/**
  * DSPropertyDelegate
  */
 
@@ -99,6 +54,50 @@ void dmi::DSPropertyDelegate::setModelData(QWidget* editor,
 void dmi::DSPropertyDelegate::updateEditorGeometry(QWidget* editor,
                                                    const QStyleOptionViewItem& option,
                                                    const QModelIndex& index) const
+{
+  Q_UNUSED(index)
+  editor->setGeometry(option.rect);
+}
+
+/**
+ * DSVRangeDelegate
+ */
+
+dmi::DSVRangeDelegate::DSVRangeDelegate(QObject* parent)
+  : QStyledItemDelegate(parent)
+{
+}
+
+QWidget* dmi::DSVRangeDelegate::createEditor(QWidget* parent,
+                                             const QStyleOptionViewItem& option,
+                                             const QModelIndex& index) const
+{
+  Q_UNUSED(option)
+  Q_UNUSED(index)
+
+  auto le = new QLineEdit(parent);
+  return le;
+}
+
+void dmi::DSVRangeDelegate::setEditorData(QWidget* editor,
+                                          const QModelIndex& index) const
+{
+    auto le = qobject_cast<QLineEdit*>(editor);
+    const QString value = index.data(Qt::DisplayRole).toString();
+    le->setText(value);
+}
+
+void dmi::DSVRangeDelegate::setModelData(QWidget* editor,
+                                         QAbstractItemModel* model,
+                                         const QModelIndex& index) const
+{
+  auto le = qobject_cast<QLineEdit*>(editor);
+  model->setData(index, le->text(), Qt::EditRole);
+}
+
+void dmi::DSVRangeDelegate::updateEditorGeometry(QWidget* editor,
+                                                 const QStyleOptionViewItem& option,
+                                                 const QModelIndex& index) const
 {
   Q_UNUSED(index)
   editor->setGeometry(option.rect);
@@ -178,14 +177,20 @@ bool dmi::DataSourceTreeItem::isExclusive() const { return exclusive_; }
 
 dmi::DataSourceTreeModel::DataSourceTreeModel(QObject *parent) : QAbstractItemModel(parent)
 {
-  root_item_ = new DataSourceTreeItem({tr("Source name"), tr("Property")});
+  root_item_ = new DataSourceTreeItem({tr("Source name"),
+                                       tr("Property"),
+                                       tr("Pulse slicer"),
+                                       tr("Value range")});
   setupModelData(SourceItem::categories, root_item_);
 }
 
 dmi::DataSourceTreeModel::DataSourceTreeModel(const map_type& sources, QObject *parent)
     : QAbstractItemModel(parent)
 {
-  root_item_ = new DataSourceTreeItem({tr("Source name"), tr("Property")});
+  root_item_ = new DataSourceTreeItem({tr("Source name"),
+                                       tr("Property"),
+                                       tr("Pulse slicer"),
+                                       tr("Value range")});
   setupModelData(sources, root_item_);
 }
 
@@ -236,7 +241,9 @@ bool dmi::DataSourceTreeModel::setData(const QModelIndex &index, const QVariant 
             emit sourceToggled(
               {item_sb->parent()->data(0).toString(),
                item_sb->data(0).toString(),
-               item_sb->data(1).toString()},
+               item_sb->data(1).toString(),
+               item_sb->data(2).toString(),
+               item_sb->data(3).toString()},
               false
             );
 
@@ -260,7 +267,9 @@ bool dmi::DataSourceTreeModel::setData(const QModelIndex &index, const QVariant 
     // notify new source being checked
     auto src_item = SourceItem(item->parent()->data(0).toString(),
                                item->data(0).toString(),
-                               item->data(1).toString());
+                               item->data(1).toString(),
+                               item->data(2).toString(),
+                               item->data(3).toString());
     emit sourceToggled(src_item, item->isChecked());
 
     return true;
@@ -356,7 +365,7 @@ void dmi::DataSourceTreeModel::setupModelData(const map_type& sources, DataSourc
   {
     // category
     QString ctg = it.key();
-    auto ctg_item = new DataSourceTreeItem({ctg, {}}, false, parent);
+    auto ctg_item = new DataSourceTreeItem({ctg, {}, {}, {}}, false, parent);
     parent->appendChild(ctg_item);
 
     bool exclusive = false;
@@ -368,7 +377,7 @@ void dmi::DataSourceTreeModel::setupModelData(const map_type& sources, DataSourc
     for(int i = 0; i < v.size(); ++i)
     {
       auto device_item = new DataSourceTreeItem(
-        {v[i], SourceItem::properties[ctg + getOutputChannel(v[i])][0]}, exclusive, ctg_item);
+        {v[i], SourceItem::properties[ctg + getOutputChannel(v[i])][0], ":", "-inf, inf"}, exclusive, ctg_item);
       ctg_item->appendChild(device_item);
     }
 
@@ -408,46 +417,4 @@ void dmi::DataSourceListModel::setSourceList(const QStringList& devices)
     devices_ = devices;
     endResetModel();
   }
-}
-
-
-/**
- * CheckBoxDelegate
- */
-
-dmi::CheckBoxDelegate::CheckBoxDelegate(QObject* parent) : QStyledItemDelegate(parent)
-{
-}
-
-QWidget* dmi::CheckBoxDelegate::createEditor(QWidget *parent,
-                                             const QStyleOptionViewItem &option,
-                                             const QModelIndex &index) const
-{
-  auto* editor = new QCheckBox(parent);
-
-  return editor;
-}
-
-void dmi::CheckBoxDelegate::setEditorData(QWidget* editor, const QModelIndex& index) const
-{
-  // not use dynamic_cast for performance
-  auto check_box = static_cast<QCheckBox*>(editor);
-  check_box->setChecked(index.model()->data(index, Qt::EditRole).toBool());
-}
-
-void dmi::CheckBoxDelegate::setModelData(QWidget* editor,
-                                         QAbstractItemModel* model,
-                                         const QModelIndex& index) const
-{
-  // not use dynamic_cast for performance
-  auto* check_box = static_cast<QCheckBox*>(editor);
-  int value = check_box->checkState() == Qt::Checked ? 1 : 0;
-  model->setData(index, value, Qt::EditRole);
-}
-
-void dmi::CheckBoxDelegate::updateEditorGeometry(QWidget* editor,
-                                                 const QStyleOptionViewItem& option,
-                                                 const QModelIndex& index) const
-{
-  editor->setGeometry(option.rect);
 }

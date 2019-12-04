@@ -47,9 +47,9 @@ void dmi::DataSourceWidget::initUI()
   tree_model_ = new DataSourceTreeModel(this);
   tree_view_->setModel(tree_model_);
   ppt_delegate_ = new DSPropertyDelegate(this);
-//  fr_delegate_ = new DSFilterRangeDelegate(this);
+  vr_delegate_ = new DSVRangeDelegate(this);
   tree_view_->setItemDelegateForColumn(1, ppt_delegate_);
-//  tree_view_->setItemDelegateForColumn(2, fr_delegate_);
+  tree_view_->setItemDelegateForColumn(2, vr_delegate_);
   tree_view_->expandToDepth(1);
   tree_view_->resizeColumnToContents(0);
 
