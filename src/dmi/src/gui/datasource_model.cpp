@@ -243,8 +243,7 @@ bool dmi::DataSourceTreeModel::setData(const QModelIndex &index, const QVariant 
                item_sb->data(0).toString(),
                item_sb->data(1).toString(),
                item_sb->data(2).toString(),
-               item_sb->data(3).toString()},
-              false
+               item_sb->data(3).toString()}, false
             );
 
             // update the tree view
@@ -261,16 +260,30 @@ bool dmi::DataSourceTreeModel::setData(const QModelIndex &index, const QVariant 
 
     } else // if (role == Qt::EditRole)
     {
+      auto old_ppt = item->data(1).toString();
+      auto old_slicer = item->data(2).toString();
+      auto old_vrange = item->data(3).toString();
       item->setData(value, index.column());
+
+      if (index.column() >= 1)
+      {
+        // remove registered item with the old property
+        emit sourceToggled(
+          {item->parent()->data(0).toString(),
+           item->data(0).toString(),
+           old_ppt,
+           old_slicer,
+           old_vrange}, false
+        );
+      }
     }
 
     // notify new source being checked
-    auto src_item = SourceItem(item->parent()->data(0).toString(),
-                               item->data(0).toString(),
-                               item->data(1).toString(),
-                               item->data(2).toString(),
-                               item->data(3).toString());
-    emit sourceToggled(src_item, item->isChecked());
+    emit sourceToggled({item->parent()->data(0).toString(),
+                        item->data(0).toString(),
+                        item->data(1).toString(),
+                        item->data(2).toString(),
+                        item->data(3).toString()}, item->isChecked());
 
     return true;
   }
