@@ -46,7 +46,7 @@ TEST(TestKbData, TestGeneral) {
     uint16_t a[12] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
     NDArray arr1((void *) a, std::vector<std::size_t>{2, 2, 3}, "uint16_t");
 
-    kb_data data;
+    KbData data;
 
     // copy from obj_data
     for (auto &v : obj_data) data.insert(v);

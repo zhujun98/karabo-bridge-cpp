@@ -357,16 +357,23 @@ namespace karabo_bridge {
  * - The data member "data_" holds a map of normal data, which can be either
  *   scalar data or small arrays.
  */
-struct kb_data {
-    kb_data() = default;
+class KbData {
 
-    ~kb_data() = default;
+    ObjectMap data_;
+    std::vector<zmq::message_t> mpmsg_; // maintain the lifetime of data
+    std::vector<msgpack::object_handle> handles_; // maintain the lifetime of data
 
-    kb_data(const kb_data&) = delete;
-    kb_data& operator=(const kb_data&) = delete;
+public:
 
-    kb_data(kb_data&&) = default;
-    kb_data& operator=(kb_data&&) = default;
+    KbData() = default;
+
+    ~KbData() = default;
+
+    KbData(const KbData&) = delete;
+    KbData& operator=(const KbData&) = delete;
+
+    KbData(KbData&&) = default;
+    KbData& operator=(KbData&&) = default;
 
     using iterator = ObjectMap::iterator;
     using const_iterator = ObjectMap::const_iterator;
@@ -402,18 +409,13 @@ struct kb_data {
         handles_.push_back(std::move(oh));
     }
 
-    void swap(kb_data& other) {
+    void swap(KbData& other) {
         metadata.swap(other.metadata);
         array.swap(other.array);
         data_.swap(other.data_);
         mpmsg_.swap(other.mpmsg_);
         handles_.swap(other.handles_);
     }
-
-private:
-    ObjectMap data_;
-    std::vector<zmq::message_t> mpmsg_; // maintain the lifetime of data
-    std::vector<msgpack::object_handle> handles_; // maintain the lifetime of data
 };
 
 /*
@@ -676,8 +678,8 @@ public:
      * Exceptions:
      * std::runtime_error if unexpected message number or unknown "content" is found
      */
-    std::map<std::string, kb_data> next() {
-        std::map<std::string, kb_data> data_pkg;
+    std::map<std::string, KbData> next() {
+        std::map<std::string, KbData> data_pkg;
 
         if (!recv_ready_) {
             sendRequest();
@@ -698,7 +700,7 @@ public:
             throw std::runtime_error(
                 "The multipart message is expected to contain (header, data) pairs!");
 
-        kb_data kbdt;
+        KbData kbdt;
 
         std::string source;
         bool is_initialized = false;
@@ -718,7 +720,7 @@ public:
                 else {
                     data_pkg.insert(std::make_pair(source, std::move(kbdt)));
                     // TODO: the following 'swap" seems to be redundant
-                    kb_data empty_data;
+                    KbData empty_data;
                     kbdt.swap(empty_data);
                 }
 
@@ -757,7 +759,7 @@ public:
         }
 
         data_pkg.insert(std::make_pair(source, std::move(kbdt)));
-        kb_data empty_data;
+        KbData empty_data;
         kbdt.swap(empty_data);
 
         return data_pkg;

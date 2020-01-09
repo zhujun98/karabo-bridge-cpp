@@ -42,7 +42,7 @@ int main (int argc, char* argv[]) {
                   << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000.
                   << " ms";
 
-        karabo_bridge::kb_data data(std::move(data_pkg.begin()->second));
+        karabo_bridge::KbData data(std::move(data_pkg.begin()->second));
         assert(data_pkg.begin()->first == "camera:output");
 
         assert(data.metadata["source"].as<std::string>() == "camera:output");

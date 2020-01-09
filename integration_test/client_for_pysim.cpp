@@ -41,7 +41,7 @@ int main (int argc, char* argv[]) {
 
         int ns = 1; // The No. of source
         for (auto it = data_pkg.begin(); it != data_pkg.end(); ++it) {
-            karabo_bridge::kb_data data(std::move(it->second));
+            karabo_bridge::KbData data(std::move(it->second));
 
             if (data_pkg.size() == 1) {
                 assert(it->first == "SPB_DET_AGIPD1M-1/CAL/APPEND_CORRECTED");
