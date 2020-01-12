@@ -7,7 +7,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-#include "karabo-bridge/kb_client.hpp"
+#include "karabo-bridge/kb_data.hpp"
 
 
 namespace karabo_bridge {

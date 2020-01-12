@@ -24,7 +24,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -g")
 
 set(KARABO_BRIDGE_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
 
-file(STRINGS "${KARABO_BRIDGE_INCLUDE_DIR}/${PROJECT_NAME}/kb_client.hpp" ${PROJECT_NAME}_version_defines
+file(STRINGS "${KARABO_BRIDGE_INCLUDE_DIR}/${PROJECT_NAME}/kb_config.hpp" ${PROJECT_NAME}_version_defines
      REGEX "#define KARABO_BRIDGE_VERSION_(MAJOR|MINOR|PATCH)")
 foreach(ver ${${PROJECT_NAME}_version_defines})
     if(ver MATCHES "#define KARABO_BRIDGE_VERSION_(MAJOR|MINOR|PATCH) +([^ ]+)$")
@@ -56,7 +56,10 @@ endif()
 # Build
 # =====
 
-set(KARABO_BRIDGE_HEADERS ${KARABO_BRIDGE_INCLUDE_DIR}/karabo-bridge/kb_client.hpp)
+set(KARABO_BRIDGE_HEADERS
+    ${KARABO_BRIDGE_INCLUDE_DIR}/karabo-bridge/kb_client.hpp
+    ${KARABO_BRIDGE_INCLUDE_DIR}/karabo-bridge/kb_data.hpp
+    ${KARABO_BRIDGE_INCLUDE_DIR}/karabo-bridge/kb_config.hpp)
 
 add_library(karabo-bridge INTERFACE)
 
