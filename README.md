@@ -47,6 +47,10 @@ $ glimpse/glimpse ServerTcpAddress
 $ glimpse/glimpse ServerTcpAddress m
 ```
 
+#### EXtra-foam C++ API
+
+[examples](https://github.com/European-XFEL/EXtra-foam/tree/dev/examples)
+
 ## Usage
 
 ```c++
